@@ -33,7 +33,7 @@ namespace PharmacyConsoleApp.Controllers
                     await command.ExecuteNonQueryAsync();
                 }
             }
-            catch { }
+            catch { throw new Exception("Error about create Warehouse"); }
 
         }
 
@@ -49,7 +49,7 @@ namespace PharmacyConsoleApp.Controllers
                     await command.ExecuteNonQueryAsync();
                 }
             }
-            catch { }
+            catch { throw new Exception("Error about delete Warehouse"); }
         }
     }
 }

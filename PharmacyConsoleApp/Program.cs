@@ -46,7 +46,7 @@ namespace PharmacyConsoleApp
 
                 }
             }
-            catch (Exception ex) { }
+            catch { throw new Exception("Warning show register or sql connection"); }
         }
         private static void MainMenu()
         {

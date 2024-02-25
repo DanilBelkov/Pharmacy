@@ -35,7 +35,7 @@ namespace PharmacyConsoleApp.Controllers
                     await command.ExecuteNonQueryAsync();
                 }
             }
-            catch { }
+            catch { throw new Exception("Error about create Batch"); }
 
         }
 
@@ -51,7 +51,7 @@ namespace PharmacyConsoleApp.Controllers
                     await command.ExecuteNonQueryAsync();
                 }
             }
-            catch { }
+            catch { throw new Exception("Error about delete Batch"); }
         }
     }
 }

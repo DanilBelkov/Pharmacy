@@ -35,7 +35,7 @@ namespace PharmacyConsoleApp.Controllers
                 }
 
             }
-            catch { }
+            catch { throw new Exception("Error about create product"); }
         }
 
         public override async Task Delete(int id)
@@ -50,7 +50,7 @@ namespace PharmacyConsoleApp.Controllers
                     await command.ExecuteNonQueryAsync();
                 }
             }
-            catch { }
+            catch { throw new Exception("Error about delete product"); }
         }
     }
 }
