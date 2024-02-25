@@ -10,28 +10,24 @@ namespace PharmacyConsoleApp
         private static string _connectionString;
         public static async Task Main(string[] args)
         {
-            _connectionString = "Server=DESKTOP-NUJ7UH6\\SQLEXPRESS;Database=Pharmacy;Trusted_Connection=True;";
+            DbConnectionController.InitDbConnection("Server=DESKTOP-NUJ7UH6\\SQLEXPRESS;Database=Pharmacy;Trusted_Connection=True;");
 
             MainMenu();
 
             Console.ReadKey();
         }
 
-        private static void ShowRegister(IBaseController controller)
+        private static async void ShowRegister(IBaseController controller)
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(_connectionString))
+                await DbConnectionController.ExecuteQueryReadAsync($"SELECT * FROM {controller.EntityName}", (reader) =>
                 {
-                    connection.Open();
-
-                    var command = new SqlCommand($"SELECT * FROM {controller.EntityName}", connection);
-                    var reader = command.ExecuteReader();
                     var count = reader.GetColumnSchema().Count;
                     string columns = "|";
                     for (int i = 0; i < count; i++)
-                    { 
-                        if(controller.Columns.TryGetValue(reader.GetName(i), out string value))
+                    {
+                        if (controller.Columns.TryGetValue(reader.GetName(i), out string value))
                             columns += String.Format("{0, 25}", value + "|");
                     }
                     Console.WriteLine(columns);
@@ -43,10 +39,9 @@ namespace PharmacyConsoleApp
                             line += String.Format("{0, 25}", reader.GetValue(i) + "|");
                         Console.WriteLine(line);
                     }
-
-                }
+                });
             }
-            catch { throw new Exception("Warning show register or sql connection"); }
+            catch { throw new Exception("Warning show register"); }
         }
         private static void MainMenu()
         {

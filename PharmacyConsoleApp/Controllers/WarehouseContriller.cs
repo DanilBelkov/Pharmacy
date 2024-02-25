@@ -1,6 +1,7 @@
 ﻿
 using PharmacyConsoleApp.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -25,13 +26,8 @@ namespace PharmacyConsoleApp.Controllers
                 Console.Write("Код аптеки - ");
                 warehouse.PharmacyId = int.Parse(Console.ReadLine());
 
-                using (SqlConnection connection = new SqlConnection(_sqlConnection))
-                {
-                    await connection.OpenAsync();
-                    var query = $"INSERT INTO Warehouse (Name, PharmacyId) VALUES ('{warehouse.Name}', {warehouse.PharmacyId})";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    await command.ExecuteNonQueryAsync();
-                }
+                var query = $"INSERT INTO Warehouse (Name, PharmacyId) VALUES ('{warehouse.Name}', {warehouse.PharmacyId})";
+                await DbConnectionController.ExecuteQueryAsync(query);
             }
             catch { throw new Exception("Error about create Warehouse"); }
 
@@ -41,13 +37,8 @@ namespace PharmacyConsoleApp.Controllers
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(_sqlConnection))
-                {
-                    await connection.OpenAsync();
-                    var query = $"DELETE FROM Warehouse WHERE ID = {id}";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    await command.ExecuteNonQueryAsync();
-                }
+                var query = $"DELETE FROM Warehouse WHERE ID = {id}";
+                await DbConnectionController.ExecuteQueryAsync(query);
             }
             catch { throw new Exception("Error about delete Warehouse"); }
         }

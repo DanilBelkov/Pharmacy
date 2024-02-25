@@ -26,14 +26,10 @@ namespace PharmacyConsoleApp.Controllers
                 var cost = Console.ReadLine();
                 product.Cost = !string.IsNullOrEmpty(cost) ? decimal.Parse(cost) : 0;
 
-                using (SqlConnection connection = new SqlConnection(_sqlConnection))
-                {
-                    await connection.OpenAsync();
-                    var query = $"INSERT INTO Product (Name, Cost) VALUES ('{product.Name}', {product.Cost.ToString()?.Replace(',', '.')})";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    await command.ExecuteNonQueryAsync();
-                }
+                var query = $"INSERT INTO Product (Name, Cost) VALUES ('{product.Name}', {product.Cost.ToString()?.Replace(',', '.')})";
 
+                await DbConnectionController.ExecuteQueryAsync(query);
+               
             }
             catch { throw new Exception("Error about create product"); }
         }
@@ -42,13 +38,8 @@ namespace PharmacyConsoleApp.Controllers
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(_sqlConnection))
-                {
-                    await connection.OpenAsync();
-                    var query = $"DELETE FROM Product WHERE ID = {id}";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    await command.ExecuteNonQueryAsync();
-                }
+                var query = $"DELETE FROM Product WHERE ID = {id}";
+                await DbConnectionController.ExecuteQueryAsync(query);
             }
             catch { throw new Exception("Error about delete product"); }
         }

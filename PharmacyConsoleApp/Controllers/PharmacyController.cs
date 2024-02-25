@@ -1,6 +1,7 @@
 ﻿
 using PharmacyConsoleApp.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -27,14 +28,9 @@ namespace PharmacyConsoleApp.Controllers
                 Console.Write("Телефон - ");
                 pharmacy.PhoneNumber = Console.ReadLine();
 
-                using (SqlConnection connection = new SqlConnection(_sqlConnection))
-                {
-                    await connection.OpenAsync();
-                    var query = $"INSERT INTO Pharmacy (Name, Address, PhoneNumber) VALUES ('{pharmacy.Name}', '{pharmacy.Address}', '{pharmacy.PhoneNumber}')";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    await command.ExecuteNonQueryAsync();
-                }
-
+                var query = $"INSERT INTO Pharmacy (Name, Address, PhoneNumber) VALUES ('{pharmacy.Name}', '{pharmacy.Address}', '{pharmacy.PhoneNumber}')";
+               
+                await DbConnectionController.ExecuteQueryAsync(query);
             }
             catch { throw new Exception("Error about create Pharmacy"); }
         }
@@ -43,13 +39,8 @@ namespace PharmacyConsoleApp.Controllers
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(_sqlConnection))
-                {
-                    await connection.OpenAsync();
-                    var query = $"DELETE FROM Pharmacy WHERE ID = {id}";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    await command.ExecuteNonQueryAsync();
-                }
+                var query = $"DELETE FROM Pharmacy WHERE ID = {id}";
+                await DbConnectionController.ExecuteQueryAsync(query);
             }
             catch { throw new Exception("Error about delete Pharmacy"); }
         }

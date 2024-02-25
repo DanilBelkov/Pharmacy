@@ -1,6 +1,7 @@
 ﻿
 using PharmacyConsoleApp.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -27,13 +28,8 @@ namespace PharmacyConsoleApp.Controllers
                 Console.Write("Количество товара - ");
                 batch.ProductCount = int.Parse(Console.ReadLine());
 
-                using (SqlConnection connection = new SqlConnection(_sqlConnection))
-                {
-                    await connection.OpenAsync();
-                    var query = $"INSERT INTO Batch (ProductId, WarehouseId, ProductCount) VALUES ('{batch.ProductId}', {batch.WarehouseId}, {batch.ProductCount})";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    await command.ExecuteNonQueryAsync();
-                }
+                var query = $"INSERT INTO Batch (ProductId, WarehouseId, ProductCount) VALUES ('{batch.ProductId}', {batch.WarehouseId}, {batch.ProductCount})";
+                await DbConnectionController.ExecuteQueryAsync(query);
             }
             catch { throw new Exception("Error about create Batch"); }
 
@@ -43,13 +39,8 @@ namespace PharmacyConsoleApp.Controllers
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(_sqlConnection))
-                {
-                    await connection.OpenAsync();
-                    var query = $"DELETE FROM Batch WHERE ID = {id}";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    await command.ExecuteNonQueryAsync();
-                }
+                var query = $"DELETE FROM Batch WHERE ID = {id}";
+                await DbConnectionController.ExecuteQueryAsync(query);
             }
             catch { throw new Exception("Error about delete Batch"); }
         }
